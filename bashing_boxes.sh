@@ -11,3 +11,6 @@ read -p "Select an input.
 6 - Exit
 " userinput
 echo "$userinput"
+if [[ $userinput =~ ^[0-9]$ ]] then # Symbols: ^ - Start of line // [0-9] - Digits between 0 and 9 // $ - End of line
+	echo "valid number"
+fi # fi ends an if statemenet
