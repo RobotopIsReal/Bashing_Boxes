@@ -62,19 +62,50 @@ fi
 if [[ $userinput = 3 ]] then
 echo "// Current option: Add item to list //"
 echo "Type "Back" to go back to menu."
-while ! [ "$posnum" = "Back" ]; do
+while ! [ "$newitem" = "Back" ]; do # repeats until you tell it to go back
 read -p "Enter the new item: " newitem
 	if ! [ "$newitem" = "Back" ]; then
 		list+=("$newitem") # this tells the script to add the element stored in $newitem to the array
-	else
-		echo "bye"
 	fi
 done
-read
+newitem=0
 userinput=0 # Sets the input to 0 to prevent it from printing out your choice infinitely
 fi
 
+# ------ FOUR ------ #
+if [[ $userinput = 4 ]] then
+echo "// Current option: Remove last item from list //"
+while ! [ "$input4" = "Back" ]; do
+	last="${list[-1]}" # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
+	echo "Removed" $last "from the list. Type Back to exit."
+	unset 'list[-1]' # removes the last element from the array
+	read input4 # waits for user input
+done
+input4=0
+userinput=0 # Sets the input to 0 to prevent it from printing out your choice infinitely
+fi
 
+# ------ FIVE ------ #
+if [[ $userinput = 5 ]] then
+echo "// Current option: Remove X item from list //"
+while ! [ "$posnum2" = "Back" ]; do
+	read -p "Enter a position number: " posnum2
+	if [[ $posnum2 =~ ^[0-9]+$ ]] then
+	removed=${list[posnum2-1]} # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
+	echo "Removed" $removed "from the list. Type Back to exit."
+	unset 'list[posnum2-1]' # removes the last element from the array
+fi
+done
+posnum2=0
+userinput=0 # Sets the input to 0 to prevent it from printing out your choice infinitely
+fi
+
+# ------ SIX ------ #
+if [[ $userinput = 6 ]] then
+echo "Exiting program..."
+echo "// Final list: " "${list[@]}"
+exit
+fi
 
 
 done # ends the menu loop
