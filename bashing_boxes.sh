@@ -1,9 +1,10 @@
-items=10
+#!/bin/bash
 
 list=("Cologne" "Crown" "Guitar" "Banana" "Milkshake" "Globe" "Raisin" "Cone" "Stocking" "Chart")
 # The $ indicates that 'items' isn't just text, but rather a value.
 echo "${list[1]}"
 # In Bash logic, ! is how you negate conditions, rather than adding 'not' after 'while'.
+while true; do
 while ! [[ $userinput =~ ^[1-6]$ ]] do
 clear
 read -p "Select an input.
@@ -20,7 +21,6 @@ echo "$userinput"
 # Adding a + before the $ would make it check for multiple numbers.
 if [[ $userinput =~ ^[1-6]$ ]] then
 	clear
-	echo "Valid number has been input."
 else
 	echo "Invalid input, please enter a number between 1-6"
 fi # fi ends an if statement
@@ -28,11 +28,17 @@ done # done ends the while loop
 
 # ------ ONE ------ #
 if [[ $userinput = 1 ]] then
-echo "${list}"
+echo "// Current option: Print List //"
+echo "Number of items:" ${#list[@]} #  The # sign makes it give the count of items in the list
+echo "${list[@]}" # The @ symbol makes it list out every item
+read # waits for user input
+userinput=0 # Sets the input to 0 to prevent it from printing out your choice infinitely
 fi
 
 # ------ TWO ------ #
-if [[ $userinput = 1 ]] then
+if [[ $userinput = 2 ]] then
 echo "// Current option: Print List //"
-echo 
+read
+userinput=0
 fi
+done
