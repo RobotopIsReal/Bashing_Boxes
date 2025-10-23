@@ -7,13 +7,14 @@ echo "${list[1]}"
 while true; do
 while ! [[ $userinput =~ ^[1-6]$ ]] do
 clear
-read -p "Select an input.
-1 - Print list
-2 - Print item at X position in list
-3 - Add item to list
-4 - Remove last item from list
-5 - Remove item from X position
-6 - Exit
+read -p "> Select an item.
+--------------------------------
+// 1 - Print list
+// 2 - Print item at X position in list
+// 3 - Add item to list
+// 4 - Remove last item from list
+// 5 - Remove item from X position
+// 6 - Exit
 " userinput
 echo "$userinput"
 # Symbols: ^ - Start of line // [0-9] - Digits between 0 and 9 // $ - End of line
@@ -37,8 +38,43 @@ fi
 
 # ------ TWO ------ #
 if [[ $userinput = 2 ]] then
-echo "// Current option: Print List //"
-read
+echo "// Current option: Print item at X position in list //"
+echo "Type "Back" to go back to menu."
+
+while ! [ "$posnum" = "Back" ]; do # lets you type infinitely until you go back to menu
+	read -p "Enter a position number: " posnum # -p makes it add a written prompt
+	if [[ $posnum =~ ^[0-9]+$ ]] then # + sign means "one or more"
+		echo "${list[$posnum-1]}" # -1 is added because bash counts from 0
+	else
+		if [ "$posnum" = "Back" ]; then
+			echo ""
+		else
+		echo "Input must be a digit."
+		read
+	fi
+	fi
+done
+posnum=0
 userinput=0
 fi
+
+# ------ THREE ------ #
+if [[ $userinput = 3 ]] then
+echo "// Current option: Add item to list //"
+echo "Type "Back" to go back to menu."
+while ! [ "$posnum" = "Back" ]; do
+read -p "Enter the new item: " newitem
+	if ! [ "$newitem" = "Back" ]; then
+		list+=("$newitem") # this tells the script to add the element stored in $newitem to the array
+	else
+		echo "bye"
+	fi
 done
+read
+userinput=0 # Sets the input to 0 to prevent it from printing out your choice infinitely
+fi
+
+
+
+
+done # ends the menu loop
