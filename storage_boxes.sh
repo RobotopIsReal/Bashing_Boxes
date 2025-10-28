@@ -34,6 +34,15 @@ print_total_number_of_objects(){
 	echo "Number of items: "${#array_of_objects[@]}
 }
 
+print_at_pos(){
+	# -p makes it add a written prompt
+	read -p "Enter a position number: " posnum
+	# + sign means "one or more"
+	if [[ $posnum =~ ^[0-9]+$ ]] then
+		# -1 is added because bash counts from 0
+		echo ${list[$posnum-1]}
+	posnum=0
+}
 
 
 
@@ -45,7 +54,7 @@ case $unser_input in
 	read
 	display_initial_menu
 		;;
-	2) print_total_number_of_objects
+	2) print_at_pos
 		;;
 	3)
 		;;
