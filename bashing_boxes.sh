@@ -41,6 +41,7 @@ if [[ $userinput = 2 ]] then
 echo "// Current option: Print item at X position in list //"
 echo "Type "Back" to go back to menu."
 
+# What does this do: 
 while ! [ "$posnum" = "Back" ]; do # lets you type infinitely until you go back to menu
 	read -p "Enter a position number: " posnum # -p makes it add a written prompt
 	if [[ $posnum =~ ^[0-9]+$ ]] then # + sign means "one or more"
@@ -49,9 +50,9 @@ while ! [ "$posnum" = "Back" ]; do # lets you type infinitely until you go back 
 		if [ "$posnum" = "Back" ]; then
 			echo ""
 		else
-		echo "Input must be a digit."
-		read
-	fi
+			echo "Input must be a digit."
+			read
+		fi
 	fi
 done
 posnum=0

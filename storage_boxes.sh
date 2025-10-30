@@ -40,25 +40,53 @@ print_at_pos(){
 	# + sign means "one or more"
 	if [[ $posnum =~ ^[0-9]+$ ]] then
 		# -1 is added because bash counts from 0
-		echo ${list[$posnum-1]}
+		echo ${array_of_objects[$posnum-1]}
 	posnum=0
+fi
 }
 
+remove_last(){
+			last="${array_of_objects[-1]}" # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
+			echo "Removed" $last "from the list. Type Back to exit."
+			unset 'array_of_objects[-1]' # removes the last element from the array
+			read input4 # waits for user input
+			input4=0
+}
 
 
 display_initial_menu
 
 case $unser_input in
+	# What this does: prints the list and number of items, then waits for an input.
 	1) print_all_objects
-	print_total_number_of_objects
-	read
-	display_initial_menu
+	   print_total_number_of_objects
+	   read
+	   display_initial_menu
 		;;
-	2) print_at_pos
+	# What this does: repeats the printing function until the user presses ESC.
+	# $'\e' is Bash syntax for ESC.
+	2) while ! [[ $posnum = $'\e' ]]; do
+	   		print_at_pos
+	   done
+	   display_initial_menu
 		;;
 	3)
+		# repeats until you tell it to go back
+		while ! [[ "$newitem" = $'\e' ]]; do
+			read -p "Enter the new item: " newitem
+		if ! [[ "$newitem" = $'\e' ]]; then
+			# this tells the script to add the element stored in $newitem to the array
+			list+=("$newitem")
+		fi
+		done
+		newitem=0
+		display_initial_menu
 		;;
 	4)
+		if ! [[ "$input4" = $'\e' ]]; then
+			remove_last
+		fi
+		display_initial_menu	
 		;;
 	*) display_initial_menu
 		;;
