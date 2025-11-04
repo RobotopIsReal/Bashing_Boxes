@@ -1,4 +1,5 @@
 #!/bin/bash
+SAVE_DIR="./data"
 
 array_of_objects=("Cologne" "Crown" "Guitar" "Banana" "Milkshake" "Globe" "Raisin" "Cone" "Stocking" "Chart")
 
@@ -28,10 +29,8 @@ display_initial_menu(){
 }
 
 print_all_objects(){
+	# @ symbol tells it to give every object in the list and # makes it a number
 	echo ${array_of_objects[@]}
-}
-
-print_total_number_of_objects(){
 	echo "Number of items: "${#array_of_objects[@]}
 }
 
@@ -42,49 +41,42 @@ print_at_pos(){
 	if [[ $posnum =~ ^[0-9]+$ ]] then
 		# -1 is added because bash counts from 0
 		echo ${array_of_objects[$posnum-1]}
-		read
-	posnum=0
 	fi
 }
 
 add_item(){
 			read -p "Enter the new item: " newitem
 			# this tells the script to add the element stored in $newitem to the array
-			list+=("$newitem")
-		newitem=0
+			array_of_objects+=("$newitem")
 }
 
 remove_last(){
 			last="${array_of_objects[-1]}" # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
 			echo "Removed" $last "from the list!"
 			unset 'array_of_objects[-1]' # removes the last element from the array
-			read input4 # waits for user input
-			input4=0
 }
 
 remove_from_pos(){
 	read -p "Enter a position number: " posnum2
 	if [[ $posnum2 =~ ^[0-9]+$ ]] then
-		removed=${array_of_objects[posnum2-1]} # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
+		removed="${array_of_objects[posnum2-1]}" # sets the value 'last' to the name of the last item. -1 is there because bash is zero-indexed.
 		echo "Removed" $removed "from the list!"
 		unset 'array_of_objects[posnum2-1]' # removes the last element from the array
-		read
 	fi
 }
 
-
+save_box(){
+	read -p "Enter a box name: " boxname
+	touch /home/nasim/Bashing_Boxes/data/$boxname.txt
+	echo "Successfully saved" "$boxname"".txt"
+}
 
 send_to_choice(){
 case $unser_input in
-	# What this does: prints the list and number of items, then waits for an input.
 	1) 
 		print_all_objects
-	    print_total_number_of_objects
-	    read
 	    display_initial_menu
 		;;
-	# What this does: repeats the printing function until the user presses ESC.
-	# $'\e' is Bash syntax for ESC.
 	2) 
 	    print_at_pos
 	    display_initial_menu
@@ -102,13 +94,16 @@ case $unser_input in
 		display_initial_menu
 		;;
 	6)
-
+		save_box
 		display_initial_menu
 		;;
+	# used for all inputs that aren't in the list of valid inputs above
 	*) 
+		echo "Invalid input!"
 		display_initial_menu
 		;;
 esac
 }
 
+# comes at the end to let all the functions get defined first.
 display_initial_menu
