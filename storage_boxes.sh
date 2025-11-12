@@ -1,5 +1,6 @@
 #!/bin/bash
 SAVE_DIR="./data"
+WAREHOUSE=$(<./warehouse_of_objects.txt)
 
 array_of_objects=("Cologne" "Crown" "Guitar" "Banana" "Milkshake" "Globe" "Raisin" "Cone" "Stocking" "Chart")
 
@@ -65,14 +66,53 @@ remove_from_pos(){
 	fi
 }
 
+# How this works:
+# 'declare -p array_of_objects' prints the declaration of an array in a way that bash can interpret.
+# > boxname.txt saves this to a file
 save_box(){
 	read -p "Enter a box name: " boxname
-	touch /home/nasim/Bashing_Boxes/data/$boxname.txt
+	touch ${SAVE_DIR}/${boxname}.txt
+	printf "%s\n" "${array_of_objects[@]}" > ${SAVE_DIR}/${boxname}.txt
 	echo "Successfully saved" "$boxname"".txt"
 }
 
+# mapfile reads each line from the txt
+# -t tells bash to not include \n inside the array items
+# < directs the plain text inside the file into the array
+load_box(){
+	read -p "Enter a box name: " boxname
+	mapfile -t array_of_objects < ${SAVE_DIR}/${boxname}.txt
+}
+
+# ls lists out every file in the directory
+list_box(){
+	ls $SAVE_DIR
+}
+
+# rm removes the indicated file
+del_box(){
+	read -p "Enter a box name: " boxname
+	rm ${SAVE_DIR}/${boxname}.txt
+	echo "Removed" "$boxname"".txt" "from your saved boxes."
+}
+
+exitmsg(){
+	echo "Thanks for using Bashing Boxes!"
+	sleep 2
+	clear
+}
+
+random_box(){
+	cat "$WAREHOUSE"
+}
+
+
+
 send_to_choice(){
 case $unser_input in
+	0)
+		exitmsg
+		;;
 	1) 
 		print_all_objects
 	    display_initial_menu
@@ -97,9 +137,24 @@ case $unser_input in
 		save_box
 		display_initial_menu
 		;;
+	7)
+		load_box
+		display_initial_menu
+		;;
+	8)
+		list_box
+		display_initial_menu
+		;;
+	9)
+		del_box
+		display_initial_menu
+		;;
+	10)
+		random_box
+		;;
 	# used for all inputs that aren't in the list of valid inputs above
 	*) 
-		echo "Invalid input!"
+		echo "Invalid input! please enter a valid number!"
 		display_initial_menu
 		;;
 esac

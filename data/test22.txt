@@ -1,0 +1,1 @@
+declare -a array_of_objects=([0]="Cologne" [1]="Crown" [2]="Guitar" [3]="Banana" [4]="Milkshake" [5]="Globe" [6]="Raisin" [7]="Cone" [8]="Stocking" [9]="Chart")
